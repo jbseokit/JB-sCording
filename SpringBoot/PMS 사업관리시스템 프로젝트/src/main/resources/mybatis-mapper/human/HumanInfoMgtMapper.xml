@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.human.HumanInfoMgtMapper">
+	<select id="selectInfo" resultType="kr.hkit.pms.domain.human.HumanInfoMgtDto">
+		select * from tb_mbr order by idx
+	</select>
+</mapper>

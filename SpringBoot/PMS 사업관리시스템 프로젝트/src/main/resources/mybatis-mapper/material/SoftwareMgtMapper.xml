@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.material.SoftwareMgtMapper">
+	<!-- <select id="매퍼 인터페이스 메소드 이름" resultType="kr.hkit.pms.domain.material.Material"></select>  -->
+	
+		
+	 <sql id="softwareColumns">
+		idx
+		,sw_nm
+		,sw_use_dep_cd
+		,sw_man_dep_cd
+		,sw_num
+		,sw_com
+		,sw_buy_date
+		,sw_ins_date
+		,sw_renew_date
+		,sw_tel
+		,sw_amount
+		,sw_price
+		
+	</sql>
+ 		 
+<!-- 	 <select id="getList"  resultType="SoftwareMgtDTO">
+ 		SELECT
+			<include refid="softwareColumns"/>
+		FROM
+			tb_sw
+		WHERE
+			idx > 0
+	
+	</select>   -->
+		
+		
+	 <select id="getList" resultType="kr.hkit.pms.domain.material.SoftwareMgtDTO">
+		
+		select <include refid="softwareColumns"/> from tb_sw 
+		
+	 </select>
+		
+	
+</mapper>
+
+

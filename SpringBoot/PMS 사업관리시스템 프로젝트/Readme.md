@@ -1,3 +1,4 @@
+https://jelly-shake-073.notion.site/IT-3c72b6d6f80e41d79f781b479d1b258c
 # [이슈관리 001] application.properites 파일 열리지 않는 문제 해결 방법
 https://sangmaeng.tistory.com/82 
 위 사이트 참고하셔서 이클립스에서 추가 설정 해주시면 되겠습니다.

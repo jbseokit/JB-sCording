@@ -15,3 +15,7 @@ https://bamdule.tistory.com/234 <hr>
 
 # [이슈관리 004] import 시 gradle 프로젝트 열리지 않는 문제 해결 방법
 settings.gradle / rootProject.name 을 대소문자 및 현재 프로젝트가 있는 폴더명칭으로 수정! 특히 대소문자 확인 할 것
+
+# [이슈관리 005] post - java script
+자바스크립트에서는 post 방식으로 전송되는 파라미터 값을 받아올 수 없기 때문에 jsp 파일에서 hidden 타입으로 먼저 값을 받아온 후 jstl을 활용하여 사용
+https://willbesoon.tistory.com/244 참고 링크!

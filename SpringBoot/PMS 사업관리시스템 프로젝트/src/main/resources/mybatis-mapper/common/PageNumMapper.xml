@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.common.PageNumMapper">
+	<select id="getTotalCountHr" resultType="int">
+		select count(*) from tb_mbr
+	</select>
+	
+	<select id="getTotalCountAt" resultType="int">
+		select count(*) from tb_atd
+	</select>
+	
+	<select id="getTotalCountVa" resultType="int">
+		select count(*) from tb_vac
+	</select>
+</mapper>

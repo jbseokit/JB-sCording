@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.human.AttendanceMgtMapper">
+	<select id="readList" resultType="kr.hkit.pms.domain.human.AttendMgtDto">
+		<![CDATA[
+		select 
+			idx, atd_sn, atd_nm, atd_gw, atd_lw, 
+			atd_bt, atd_bt_dt, atd_bt_ct, 
+			atd_dp, atd_dp_dt, atd_dp_ct
+		from (
+			select  
+				rownum rn, idx, atd_sn, atd_nm, atd_gw, atd_lw, 
+				atd_bt, atd_bt_dt, atd_bt_ct, 
+				atd_dp, atd_dp_dt, atd_dp_ct
+			from 
+				tb_atd
+			where rownum <= (#{pageNum, jdbcType=NUMERIC} * #{amount, jdbcType=NUMERIC})
+		) where rn > (#{pageNum, jdbcType=NUMERIC}-1) * #{amount, jdbcType=NUMERIC}
+		]]>
+	</select>
+	
+	<select id="read" resultType="kr.hkit.pms.domain.human.AttendMgtDto">
+		select 				idx, atd_sn, atd_nm, atd_gw, atd_lw, 
+							atd_bt, atd_bt_dt, atd_bt_ct, 
+							atd_dp, atd_dp_dt, atd_dp_ct
+		from
+						    tb_atd
+		where 
+						    atd_sn = #{atd_sn}
+	</select>
+	
+	
+	
+	<insert id='create'>
+		insert into tb_atd (
+						    idx, atd_sn, atd_nm, atd_gw, atd_lw, 
+							atd_bt, atd_bt_dt, atd_bt_ct, 
+							atd_dp, atd_dp_dt, atd_dp_ct) 
+						    values 
+					    (seq_atd_idx.nextval, #{atd_sn}, #{atd_nm},
+					    sysdate, #{atd_lw, jdbcType=DATE}, #{atd_bt}, 
+					    #{atd_bt_dt}, #{atd_bt_ct}, #{atd_dp},
+					    #{atd_dp_dt}, #{atd_dp_ct} ) 
+	</insert>
+	
+	<update id='update'>
+		update 
+			tb_atd
+		set 
+			atd_lw = sysdate
+			  
+		where 
+			atd_sn = #{atd_sn}
+	
+	</update>
+	
+	
+</mapper>
+

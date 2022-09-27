@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.project.ProjectMbrMapper">
+
+<select id="read" resultType="kr.hkit.pms.domain.project.ProjectMbrDto">
+  select * from prj_mbr_tb where idx = #{idx}
+</select>
+
+<select id="getTotalCount" resultType="int">
+  select count(*) from prj_mbr_tb where idx > 0
+</select>
+
+<select id="getListWithPaging" resultType="kr.hkit.pms.domain.project.ProjectMbrDto">
+  <![CDATA[
+  	select
+  		idx, prjmbr_prjnm, prjmbr_total, prjmbr_lev, prjmbr_mbrnm, prjmbr_mbrtask
+  	from
+  		(
+  		select /*+INDEX_DESC(prj_mbr_tb tb_prjmbr_pk) */
+  		  rownum rn,idx, prjmbr_prjnm, prjmbr_total, prjmbr_lev, prjmbr_mbrnm, prjmbr_mbrtask
+  		
+  	from
+  	  prj_mbr_tb
+  	where rownum <= 20 
+  	)
+    where rn > 10
+  	]]>
+</select>
+
+<delete id ="delete">
+ delete from prj_mbr_tb where idx = #{idx}
+</delete> 
+
+<update id="update">
+	update prj_mbr_tb
+	set prjmbr_prjnm = #{prjmbr_prjnm},
+	prjmbr_total = #{prjmbr_total},
+	prjmbr_lev = #{prjmbr_lev},
+	prjmbr_mbrnm = #{prjmbr_mbrnm},
+	prjmbr_mbrtask = #{prjmbr_mbrtask},
+	
+	where idx = #{idx}
+</update>
+
+<insert id = "insert">
+  insert into prj_mbr_tb (idx, prjmbr_prjnm, prjmbr_total, prjmbr_lev, prjmbr_mbrnm, prjmbr_mbrtask)
+						  
+  values (#{idx}, #{prjmbr_prjnm, jdbcType=VARCHAR}, #{prjmbr_total, jdbcType=VARCHAR}, #{prjmbr_lev, jdbcType=VARCHAR},
+          #{prjmbr_mbrnm, jdbcType=VARCHAR}, #{prjmbr_mbrtask, jdbcType=VARCHAR})
+ 
+ </insert>
+
+</mapper>
+

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.board.BoardFreeMapper">
+
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND">
+			<foreach collection="typeArr" item="type" separator="OR">
+				<if test="type == 'T'.toString()">
+				CUM_TITLE like '%'||#{keyword}||'%'
+				</if>
+				<if test="type == 'C'.toString()">
+				CUM_CONTENTS like '%'||#{keyword}||'%'
+				</if>
+				<if test="type == 'W'.toString()">
+				CUM_WRITER like '%'||#{keyword}||'%'
+				</if>
+			</foreach>
+		</trim>
+	</sql>
+
+
+
+	<!-- 글 생성 -->
+ 	<insert id="freeinsert"> 	 	
+		insert into TB_COMMUNITY (IDX, CUM_TITLE, CUM_CONTENTS, CUM_WRITER, CUM_REGISTER_TIME )
+		values (TB_COMMUNITY_IDX.nextval, #{CUM_TITLE}, #{CUM_CONTENTS}, #{CUM_WRITER}, sysdate)
+	</insert>
+	
+	<insert id="insertSelectKey">
+		<selectKey keyProperty="IDX" order="BEFORE" resultType="long">
+			select TB_COMMUNITY_IDX.nextval from dual
+		</selectKey>	
+		insert into TB_COMMUNITY (IDX, CUM_TITLE, CUM_CONTENTS, CUM_WRITER, CUM_REGISTER_TIME)
+		values (#{IDX}, #{CUM_TITLE}, #{CUM_CONTENTS}, #{CUM_WRITER}, sysdate)
+	</insert>
+	
+	
+	
+	<!-- 리스트 보기 -->
+	<select id="freegetList" resultType="kr.hkit.pms.domain.board.BoardFreeDTO">
+		select * from TB_COMMUNITY order by IDX
+	</select>
+ 	 
+ 
+	<!-- 글 조회 -->
+	<select id="freeread" resultType="kr.hkit.pms.domain.board.BoardFreeDTO">
+		select * from TB_COMMUNITY where IDX = #{IDX}
+	</select>
+	
+	
+	<!-- 삭제하기 -->
+	<delete id="freedelete">	<!--  BoardMapper.java 인터페이스 메소드명과 동일 -->
+		delete from TB_COMMUNITY where IDX = #{IDX}
+	</delete>
+	
+	<!-- 수정하기 -->
+	<update id="freeupdate">
+		update TB_COMMUNITY 
+		SET CUM_TITLE = #{CUM_TITLE},
+			CUM_CONTENTS = #{CUM_CONTENTS},
+			CUM_WRITER = #{CUM_WRITER},
+			CUM_REGISTER_TIME = sysdate
+			WHERE IDX = #{IDX}
+	</update>
+	
+	<select id="getListWithPaging" resultType="kr.hkit.pms.domain.board.BoardFreeDTO">
+	<![CDATA[
+		SELECT * FROM
+		( SELECT /*+ INDEX_DESC(TB_COMMUNITY TB_COMMUNITY_PK) */ 
+		ROWNUM RN, IDX, CUM_TITLE, CUM_CONTENTS, CUM_WRITER, CUM_REGISTER_TIME
+		FROM TB_COMMUNITY
+		WHERE 
+	]]>
+	<include refid="criteria"></include>
+	<![CDATA[
+		ROWNUM <= (#{pageNum, jdbcType=NUMERIC} * #{amount, jdbcType=NUMERIC})
+		)
+		WHERE RN > (#{pageNum, jdbcType=NUMERIC} -1) * #{amount, jdbcType=NUMERIC}
+	]]>
+	</select>
+	
+	<select id="gettotalcount" resultType="int">
+	select count(IDX) from TB_COMMUNITY where 
+	<include refid="criteria"></include>
+	IDX > 0
+	</select>
+	
+	<!-- 검색 -->
+	<select id="searchT" resultType="kr.hkit.pms.domain.board.BoardFreeDTO">
+	<![CDATA[
+	select * from TB_COMMUNITY
+	where
+	]]>
+	
+	<![CDATA[
+	rownum < 10
+	]]>
+	</select>
+	
+</mapper>
+
+

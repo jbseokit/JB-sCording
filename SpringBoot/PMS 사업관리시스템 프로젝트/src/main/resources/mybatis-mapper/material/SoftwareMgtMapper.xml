@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.material.SoftwareMgtMapper">
+	
+	 <select id="swList" resultType="kr.hkit.pms.domain.material.SoftwareMgtDTO">
+		select * from tb_sw
+	</select> 
+	
+	<select id="comboList" resultType="kr.hkit.pms.domain.material.SoftwareMgtDTO"> 
+		select distinct sw_nm from tb_sw
+	</select>
+	<select id="comboListPage" parameterType="String" resultType="kr.hkit.pms.domain.material.SoftwareMgtDTO" > 
+		select * from tb_sw where sw_nm = #{sw_nm}
+	</select>
+	
+	<insert id="insert">
+		insert into tb_sw (
+							idx, sw_nm, sw_use_dep, sw_man_dep, sw_num,
+							sw_com, sw_buy_date, sw_ins_date, sw_renew_date, sw_tel,
+							sw_amount, sw_price)
+							values
+							(seq_sw_idx.nextval, #{sw_nm }, #{sw_use_dep}, 
+							#{sw_man_dep}, #{sw_num}, #{sw_com}, 
+							#{sw_buy_date , jdbcType=DATE}, #{sw_ins_date ,jdbcType=DATE}, #{sw_renew_date,jdbcType=DATE }, #{sw_tel }, 
+							#{sw_amount }, #{sw_price })
+	</insert>
+		
+	 <select id="getList" resultType="kr.hkit.pms.domain.material.SoftwareMgtDTO">
+		select * from tb_sw where idx = #{idx}
+	</select>
+	
+	<delete id="delete">
+		delete from tb_sw where idx = #{idx}
+	</delete>
+	
+	<update id="update">
+		update tb_sw set sw_nm=#{sw_nm }, sw_use_dep=#{sw_use_dep}, sw_man_dep=#{sw_man_dep}, sw_num=#{sw_num },
+							sw_com=#{sw_com}, sw_buy_date=#{sw_buy_date , jdbcType=DATE}, sw_ins_date=#{sw_ins_date ,jdbcType=DATE}, sw_renew_date= #{sw_renew_date,jdbcType=DATE }, sw_tel=#{sw_tel },
+							sw_amount=#{sw_amount },sw_price=#{sw_price }
+							where idx = #{idx}
+	</update>
+	
+	<!-- 페이징 처리 -->
+ 		<select id="getListWithPaging" resultType="kr.hkit.pms.domain.material.SoftwareMgtDTO">
+		<![CDATA[
+		select
+				rn, idx, sw_nm, sw_use_dep, sw_man_dep, sw_num, sw_com, sw_buy_date, 
+				sw_ins_date, sw_renew_date, sw_tel, sw_amount, sw_price
+			from (
+				select /*+ index_asc(tb_sw)  */
+						rownum rn, idx, sw_nm, sw_use_dep, sw_man_dep, sw_num, sw_com, sw_buy_date, 
+						sw_ins_date, sw_renew_date, sw_tel, sw_amount, sw_price
+				from tb_sw
+				where rownum <= #{pageNum } * #{amount} )
+			where rn > (#{pageNum }-1) * #{amount }	
+			order by idx
+	
+		]]>
+		</select> 
+	
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from tb_sw
+	</select>
+<!-- /페이징 처리 -->		
+	
+</mapper>
+
+

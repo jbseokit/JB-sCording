@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.project.ProjectInfoMapper">
+
+<select id="read" resultType="kr.hkit.pms.domain.project.ProjectInfoDto">
+  select * from prj_info_tb where idx = #{idx}
+</select>
+
+<select id="getTotalCount" resultType="int">
+  select count(*) from prj_info_tb where idx > 0
+</select>
+
+<select id="getListWithPaging" resultType="kr.hkit.pms.domain.project.ProjectInfoDto">
+  <![CDATA[
+  	select
+  		idx, prjinfo_prjnm, prjinfo_ef, prjinfo_cp, prjinfo_task, prjinfo_req, prjinfo_sales, prjinfo_tool,
+  		prjinfo_cpmanager, prjinfo_cptel, prjinfo_cpfax
+  	from
+  		(
+  		select /*+INDEX_DESC(prj_info_tb tb_prjinfo_pk) */
+  		  rownum rn,idx, prjinfo_prjnm, prjinfo_ef, prjinfo_cp, prjinfo_task, prjinfo_req, prjinfo_sales, prjinfo_tool,
+  		prjinfo_cpmanager, prjinfo_cptel, prjinfo_cpfax
+  	from
+  	  prj_info_tb
+  	where rownum <= 20 
+  	)
+    where rn > 10
+  	]]>
+</select>
+
+<delete id ="delete">
+ delete from prj_info_tb where idx = #{idx}
+</delete> 
+
+<update id="update">
+	update prj_info_tb
+	set prjinfo_prjnm = #{prjinfo_prjnm},
+	prjinfo_ef = #{prjinfo_ef},
+	prjinfo_cp = #{prjinfo_cp},
+	prjinfo_task = #{prjinfo_task},
+	prjinfo_req = #{prjinfo_req},
+	prjinfo_sales = #{prjinfo_sales},
+	prjinfo_tool = #{prjinfo_tool},
+	prjinfo_cpmanager = #{prjinfo_cpmanager},
+	prjinfo_cptel = #{prjinfo_cptel},
+	prjinfo_cpfax = #{prjinfo_cpfax},
+	where idx = #{idx}
+</update>
+
+<insert id = "insert">
+  insert into prj_info_tb (idx, prjinfo_prjnm, prjinfo_ef, prjinfo_cp, prjinfo_task, prjinfo_req, prjinfo_sales, prjinfo_tool,
+  							prjinfo_cpmanager, prjinfo_cptel, prjinfo_cpfax)
+  
+  values (#{idx}, #{prjinfo_prjnm, jdbcType=VARCHAR}, #{prjinfo_efjdbcType=VARCHAR}, #{prjinfo_cpjdbcType=VARCHAR}, 
+          #{prjinfo_taskjdbcType=VARCHAR}, #{prjinfo_reqjdbcType=VARCHAR}, #{prjinfo_salesjdbcType=VARCHAR}, 
+          #{prjinfo_tooljdbcType=VARCHAR}, #{prjinfo_cpmanagerjdbcType=VARCHAR}, #{prjinfo_cpteljdbcType=VARCHAR},
+          #{prjinfo_cpfaxjdbcType=VARCHAR})
+ 
+ </insert>
+
+</mapper>
+

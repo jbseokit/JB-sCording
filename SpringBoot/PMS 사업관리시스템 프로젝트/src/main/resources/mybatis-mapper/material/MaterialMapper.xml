@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.material.EquipmentMgtMapper">
+
+	<select id="equipList" resultType="kr.hkit.pms.domain.material.EquipmentMgtDTO">
+		select * from tb_eqm
+	</select>
+	
+	<select id="comboList" resultType="kr.hkit.pms.domain.material.EquipmentMgtDTO"> 
+		select distinct eqm_nm from tb_eqm
+	</select>
+	<select id="comboListPage" parameterType="String" resultType="kr.hkit.pms.domain.material.EquipmentMgtDTO"> 
+		select * from tb_eqm where eqm_nm = #{eqm_nm}
+	</select>
+	
+	<insert id="insert">
+		insert into tb_eqm (
+							idx, eqm_nm, eqm_use_dep, eqm_man_dep, eqm_num,
+							eqm_com, eqm_buy_date, eqm_ins_date, eqm_tel,
+							eqm_rep_req_date, eqm_rep_com_date, eqm_amount,eqm_price)
+							values
+							(seq_eqm_idx.nextval, #{eqm_nm }, #{eqm_use_dep}, 
+							#{eqm_man_dep}, #{eqm_num}, #{eqm_com}, 
+							#{eqm_buy_date , jdbcType=DATE}, #{eqm_ins_date ,jdbcType=DATE}, #{eqm_tel }, 
+							#{eqm_rep_req_date, jdbcType=DATE }, #{eqm_rep_com_date, jdbcType=DATE }, #{eqm_amount }, #{eqm_price })
+									
+	</insert>
+	
+	<select id="getList" resultType="kr.hkit.pms.domain.material.EquipmentMgtDTO">
+		select * from tb_eqm where idx = #{idx}
+	</select>
+	
+	<delete id="delete">
+		delete from tb_eqm where idx = #{idx}
+	</delete>
+	
+	<update id="update">
+		update tb_eqm set eqm_nm=#{eqm_nm }, eqm_use_dep=#{eqm_use_dep}, eqm_man_dep=#{eqm_man_dep}, eqm_num=#{eqm_num },
+							eqm_com=#{eqm_com}, eqm_buy_date=#{eqm_buy_date , jdbcType=DATE}, eqm_ins_date=#{eqm_ins_date ,jdbcType=DATE}, eqm_tel=#{eqm_tel },
+							eqm_rep_req_date=#{eqm_rep_req_date, jdbcType=DATE }, eqm_rep_com_date=#{eqm_rep_com_date, jdbcType=DATE }, eqm_amount=#{eqm_amount },eqm_price=#{eqm_price }
+							where idx = #{idx}
+	</update>
+	
+
+
+
+ 		<select id="getListWithPaging" resultType="kr.hkit.pms.domain.material.EquipmentMgtDTO">
+		<![CDATA[
+		select
+				rn, idx, eqm_nm, eqm_use_dep, eqm_man_dep, eqm_num, eqm_com, eqm_buy_date, 
+				eqm_ins_date, eqm_tel, eqm_rep_req_date, eqm_rep_com_date, eqm_amount, eqm_price
+			from (
+				select /*+ index_asc(tb_eqm)  */
+						rownum rn, idx, eqm_nm, eqm_use_dep, eqm_man_dep, eqm_num, eqm_com, eqm_buy_date, 
+						eqm_ins_date, eqm_tel, eqm_rep_req_date, eqm_rep_com_date, eqm_amount, eqm_price
+				from tb_eqm
+				
+				
+				where rownum <= #{pageNum} * #{amount} )
+			where rn > (#{pageNum}-1) * #{amount}	
+			order by idx
+		]]>
+		
+		</select> 
+	
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from tb_eqm 
+		
+	</select>
+	
+</mapper>
+

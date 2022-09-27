@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.human.HumanInfoMgtMapper">
+	
+	<select id="readList" resultType="kr.hkit.pms.domain.human.HumanInfoMgtDto">
+		<![CDATA[
+		select 
+			idx, mbr_sn, mbr_nm, mbr_tel, mbr_phone, mbr_em, mbr_addr_bx, mbr_addr_dtl, 
+			mbr_addr_post, mbr_dep_cd, mbr_hired_d, mbr_id, mbr_pw, mbr_cls_cd 
+		from (
+			select  
+				rownum rn, idx, mbr_sn, mbr_nm, mbr_tel, mbr_phone, mbr_em, mbr_addr_bx, mbr_addr_dtl, 
+				mbr_addr_post, mbr_dep_cd, mbr_hired_d, mbr_id, mbr_pw, mbr_cls_cd
+			from 
+				tb_mbr
+			where rownum <= (#{pageNum, jdbcType=NUMERIC} * #{amount, jdbcType=NUMERIC})
+			order by idx
+		) where rn > (#{pageNum, jdbcType=NUMERIC}-1) * #{amount, jdbcType=NUMERIC}
+		order by idx
+		]]>
+	</select>
+	
+	<select id="read" resultType="kr.hkit.pms.domain.human.HumanInfoMgtDto">
+		select 				idx, mbr_sn, mbr_nm, 
+						    mbr_tel, encryption_aes.dec_aes(mbr_phone) as "mbr_phone", mbr_em,
+						    mbr_addr_bx, encryption_aes.dec_aes(mbr_addr_dtl) as "mbr_addr_dtl", mbr_addr_post,
+						    mbr_dep_cd, mbr_hired_d,
+						    mbr_id, encryption_aes.dec_aes(mbr_pw) as "mbr_pw", mbr_cls_cd
+		from
+						    tb_mbr
+		where 
+						    mbr_sn = #{mbr_sn}
+	</select>
+	
+	<insert id='create'>
+		insert into tb_mbr (
+						    idx, mbr_sn, mbr_nm, 
+						    mbr_tel, mbr_phone, mbr_em,
+						    mbr_addr_bx, mbr_addr_dtl, mbr_addr_post,
+						    mbr_dep_cd, mbr_hired_d,
+						    mbr_id, mbr_pw, mbr_cls_cd,
+						    rgtr_id, rgtr_dt, mdfr_id, mdfr_dt) 
+		values 
+					    (seq_mbr_idx.nextval, to_char(#{mbr_hired_d}, 'yyyyMMdd')||seq_mbr_sn.nextval, #{mbr_nm},
+					    #{mbr_tel, jdbcType=VARCHAR}, ENCRYPTION_AES.ENC_AES(#{mbr_phone}), #{mbr_em, jdbcType=VARCHAR}, 
+					    #{mbr_addr_bx}, ENCRYPTION_AES.ENC_AES(#{mbr_addr_dtl, jdbcType=VARCHAR}), #{mbr_addr_post},
+					    #{mbr_dep_cd, jdbcType=VARCHAR}, #{mbr_hired_d, jdbcType=DATE}, 
+					    #{mbr_id}, ENCRYPTION_AES.ENC_AES(#{mbr_pw}), #{mbr_cls_cd, jdbcType=VARCHAR},
+					    #{mbr_id, jdbcType=VARCHAR}, sysdate, #{mdfr_id, jdbcType=VARCHAR}, #{mdfr_dt, jdbcType=DATE})
+	</insert>
+	
+	<update id='update'>
+		update 
+			tb_mbr 
+		set 
+			mbr_phone =	ENCRYPTION_AES.ENC_AES(#{mbr_phone}), mbr_em = #{mbr_em}, 
+			mbr_addr_bx = #{mbr_addr_bx}, mbr_addr_dtl = ENCRYPTION_AES.ENC_AES(#{mbr_addr_dtl, jdbcType=VARCHAR}), mbr_addr_post = #{mbr_addr_post},
+			mbr_dep_cd = #{mbr_dep_cd}, mbr_pw = ENCRYPTION_AES.ENC_AES(#{mbr_pw}), mbr_cls_cd = #{mbr_cls_cd}
+			  
+		where 
+			mbr_sn = #{mbr_sn}
+	
+	</update>
+	
+	
+	<delete id='delete'>
+		delete from tb_mbr
+		where mbr_sn = #{mbr_sn}
+	</delete>
+	
+	<select id='deleteName' resultType="kr.hkit.pms.domain.human.HumanInfoMgtDto">
+		select mbr_nm from tb_mbr
+		where mbr_sn = #{mbr_sn}
+	</select>
+	
+	
+</mapper>

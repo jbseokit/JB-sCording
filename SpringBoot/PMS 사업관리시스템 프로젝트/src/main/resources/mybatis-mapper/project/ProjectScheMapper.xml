@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.project.ProjectScheMapper">
+
+<select id="read" resultType="kr.hkit.pms.domain.project.ProjectScheDto">
+  select * from prj_sche_tb where idx = #{idx}
+</select>
+
+<select id="getTotalCount" resultType="int">
+  select count(*) from prj_sche_tb where idx > 0
+</select>
+
+<select id="getListWithPaging" resultType="kr.hkit.pms.domain.project.ProjectScheDto">
+  <![CDATA[
+  	select
+  		idx, prjsche_prjnm, prjsche_sdate, prjsche_edate
+  	from
+  		(
+  		select /*+INDEX_DESC(prj_sche_tb tb_prjsche_pk) */
+  		  rownum rn, idx, prjsche_prjnm, prjsche_sdate, prjsche_edate
+  		
+  	from
+  	  prj_sche_tb
+  	where rownum <= 20
+  	) 
+    where rn > 10
+  	]]>
+</select>
+
+<delete id ="delete">
+ delete from prj_sche_tb where idx = #{idx}
+</delete> 
+
+<update id="update">
+	update prj_sche_tb
+	set prjsche_prjnm = #{prjsche_prjnm},
+	prjsche_tasnm = #{prjsche_tasnm},
+	prjsche_sdate = sysdate,
+	prjsche_edate = sysdate
+	where idx = #{idx}
+</update>
+
+<insert id = "insert">
+  insert into prj_sche_tb (idx, prjsche_prjnm, prjsche_sdate, prjsche_edate)
+						  
+  values (#{idx}, #{prjsche_prjnm, jdbcType=VARCHAR}, #{prjsche_sdate, jdbcType=VARCHAR}, 
+  		  #{prjsche_edate, jdbcType=VARCHAR} )
+ 
+ </insert>
+
+</mapper>
+

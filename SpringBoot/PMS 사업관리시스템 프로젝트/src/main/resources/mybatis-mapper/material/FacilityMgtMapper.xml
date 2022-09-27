@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.material.FacilityMgtMapper">
+
+	<select id="fctList" resultType="kr.hkit.pms.domain.material.FacilityMgtDTO">
+		select * from tb_fct
+	</select>
+	
+	<select id="comboList" resultType="kr.hkit.pms.domain.material.FacilityMgtDTO"> 
+		select distinct fct_nm from tb_fct 
+	</select>
+	<select id="comboListPage" parameterType="String" resultType="kr.hkit.pms.domain.material.FacilityMgtDTO"> 
+		select * from tb_fct where fct_nm = #{fct_nm}
+	</select>
+	
+	<insert id="insert">
+		insert into tb_fct (
+							idx, fct_nm, fct_user_sn, fct_str, fct_end)
+							values
+							(seq_fct_idx.nextval, #{fct_nm }, #{fct_user_sn}, 
+							#{fct_str , jdbcType=DATE}, #{fct_end ,jdbcType=DATE})
+									
+	</insert>
+	
+	<select id="getList" resultType="kr.hkit.pms.domain.material.FacilityMgtDTO">
+		select * from tb_fct where idx = #{idx}
+	</select>
+	
+	<delete id="delete">
+		delete from tb_fct where idx = #{idx}
+	</delete>
+	
+	<update id="update">
+		update tb_fct set fct_nm=#{fct_nm }, fct_user_sn=#{fct_user_sn}, fct_str=#{fct_str , jdbcType=DATE}, fct_end=#{fct_end ,jdbcType=DATE}
+							where idx = #{idx}
+	</update>
+	
+	<!-- 페이징 처리 -->
+ 		<select id="getListWithPaging" resultType="kr.hkit.pms.domain.material.FacilityMgtDTO">
+		<![CDATA[
+		select
+				rn, idx, fct_nm, fct_user_sn, fct_str, fct_end
+			from (
+				select /*+ index_asc(tb_fct)  */
+						rownum rn, idx, fct_nm, fct_user_sn, fct_str, fct_end
+				from tb_fct
+				where rownum <= #{pageNum} * #{amount} )
+			where rn > (#{pageNum}-1) * #{amount}	
+			order by idx
+	
+		]]>
+		</select> 
+	
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from tb_fct
+	</select>
+<!-- /페이징 처리 -->		
+		
+</mapper>
+

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.hkit.pms.mapper.human.VacationMgtMapper">
+	<select id="readList"
+		resultType="kr.hkit.pms.domain.human.VacationMgtDto">
+		<![CDATA[
+		select 
+			idx, vac_sn, vac_nm, vac_str, vac_end, vac_type, vac_cnt
+		from (
+			select  
+				rownum rn, idx, vac_sn, vac_nm, vac_str, vac_end, vac_type, vac_cnt
+			from 
+				tb_vac
+			where rownum <= (#{pageNum, jdbcType=NUMERIC} * #{amount, jdbcType=NUMERIC})
+		) where rn > (#{pageNum, jdbcType=NUMERIC}-1) * #{amount, jdbcType=NUMERIC}
+		]]>
+	</select>
+	
+	<select id="read" resultType="kr.hkit.pms.domain.human.VacationMgtDto">
+		select 				
+			idx, vac_sn, vac_nm, vac_str, vac_end, vac_type, vac_cnt
+		from
+		    tb_vac
+		where 
+			vac_sn = #{vac_sn}
+	</select>
+	
+
+	<insert id='create'>
+		insert into tb_vac (
+					idx, vac_sn, vac_nm, vac_str, vac_end,
+					vac_type, vac_cnt)
+		values
+		(seq_vac_idx.nextval, #{vac_sn}, #{vac_nm},
+		#{vac_str}, #{vac_end}, #{vac_type}, (SELECT to_date(to_char(#{vac_end}, 'yyyyMMdd'), 'yyyyMMdd') 
+												- to_date(to_char(#{vac_str}, 'yyyyMMdd'), 'yyyyMMdd') + 1 FROM dual)
+		)
+	</insert>
+	
+	
+	<update id='update'>
+		update 
+			tb_vac
+		set 
+			vac_end = #{vac_end}, vac_type = #{vac_type}, 
+			vac_cnt = (SELECT to_date(to_char(#{vac_end}, 'yyyyMMdd'), 'yyyyMMdd') - to_date(to_char(vac_str, 'yyyyMMdd'), 'yyyyMMdd') + 1 FROM dual)
+			  
+		where 
+			vac_sn = #{vac_sn}
+	
+	</update>
+	
+	
+	
+</mapper>

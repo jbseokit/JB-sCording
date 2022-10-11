@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ieetu.study.mapper.RegistrationMapper">
+	<insert id="insertMember">
+		insert into tb_mbr (mbr_nm, mbr_em, mbr_phone, mbr_id, mbr_pw)
+		values (#{mbrNm}, #{mbrEm}, #{mbrPhone}, #{mbrId}, #{mbrPw})
+	</insert>
+</mapper>

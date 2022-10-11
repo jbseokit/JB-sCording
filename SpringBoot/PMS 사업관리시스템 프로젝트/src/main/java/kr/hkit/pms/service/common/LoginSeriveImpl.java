@@ -17,7 +17,9 @@ public class LoginSeriveImpl implements LoginService {
 	
 	@Override
 	public LoginDto selectHrLogin(String mbr_sn) {
-		return lm.read(mbr_sn);
+		
+	    return lm.read(mbr_sn);
+	    
 	}
 
 	

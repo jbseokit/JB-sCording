@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ieetu.study.mapper.NoticeMapper">
-
+    <select id="selectNoticeInfo" resultType="com.ieetu.study.domain.NoticeDto">
+        select * from tb_notice order by nt_status desc, idx desc
+    </select>
+    
+    <select id="selectNoticeInfoOne" resultType="com.ieetu.study.domain.NoticeDto">
+        select * from tb_notice where idx = #{idx}
+    </select>
+    
+    <insert id="insertNoticeInfo">
+        insert into tb_notice (nt_status, nt_title, nt_writer, nt_content, nt_reg_date)
+        values (#{ntStatus}, #{ntTitle}, #{ntWriter}, #{ntContent}, #{ntRegDate})
+    </insert>
+    
 </mapper>

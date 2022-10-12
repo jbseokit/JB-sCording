@@ -22,13 +22,4 @@ public class LoginServiceImpl implements LoginService {
         
     }
 
-    @Override
-    public void registMember(MemberDto mbr) {
-        
-        loginmapper.insertMember(mbr);
-        
-    }
-    
-    
-    
 }

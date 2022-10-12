@@ -9,11 +9,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberDto {
     
-    private int idx;
     private String mbrNm;
+    
     private String mbrPhone;
+    
     private String mbrEm;
+    
     private String mbrId;
+    
     private String mbrPw;
+    
+    private String mbrPwVal;
     
 }

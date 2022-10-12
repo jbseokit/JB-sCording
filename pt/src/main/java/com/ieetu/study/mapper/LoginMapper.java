@@ -12,6 +12,4 @@ public interface LoginMapper {
     
     public List<MemberDto> selectMember();
     
-    public void insertMember(MemberDto mbr);
-    
 }

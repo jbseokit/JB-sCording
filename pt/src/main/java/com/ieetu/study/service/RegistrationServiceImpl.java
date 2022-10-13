@@ -22,4 +22,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 		
 	}
 
+    @Override
+    public int checkid(String id) {
+        
+        return regMapper.selectId(id);
+        
+    }
+	
+	
+
 }

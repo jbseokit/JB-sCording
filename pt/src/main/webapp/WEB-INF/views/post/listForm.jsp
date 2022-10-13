@@ -5,6 +5,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type="text/css">
+ul li { list-style-type: none; display: inline-block; margin: 3px;}
+table {width: 65%; border: 1px solid; text-align: center;}
+.paging {padding-left: 280px;}
+a {text-decoration: none;}
+</style>
 <meta charset="UTF-8">
 <title>공지사항</title>
 </head>
@@ -12,7 +18,7 @@
     <div>
         <h2>공지사항</h2>
         <!-- 검색기능 -->
-        <%--         <form id="searchForm" class="d-flex" action="/board/noticelist"
+<%--         <form id="searchForm" class="d-flex" action="/board/noticelist"
             method="get">
             <select name="type" class="form-select me-2"
                 aria-label="Default select example">
@@ -34,11 +40,21 @@
         </form> --%>
     </div>
     <div class="card mb-4">
-        <div class="card-body">
+        <form id="amountForm" action="/notice/list" method="get">
+            <button class="ntreg" type="button" onclick="self.location='regist'">글쓰기</button>
+                <div style="display: inline;">전체 | ${pageMaker.total}</div>
+                    <div style="display: inline;"> 출력 수 
+                        <select class="amount" name="amount">
+                            <option >선택</option>
+                            <option value="10"> 10 </option>
+                            <option value="20"> 20 </option>
+                            <option value="30"> 30 </option>
+                        </select>
+                    </div>
+            <input type="hidden" id="selected" name="amount">
+        </form>
             <form id="actionForm">
-                <button type="button" onclick="self.location='regist'">글쓰기</button>
-                <table class="table" border="1"
-                    style="border: 1px solid; text-align: center;">
+                <table class="table" border="1">
                     <thead>
                         <tr>
                             <th>상태</th>
@@ -51,17 +67,23 @@
                     <tbody class="table-group-divider">
                         <c:forEach items="${noticeInfo}" var="nlist">
                             <tr>
-                                <td style="color: red"><c:out
-                                        value="${nlist.ntStatus}"/></td>
-                                <td><c:out value="${nlist.idx}" /></td>
-                                <td><a class='move' style="text-decoration: none"
-                                    href='<c:out value="${nlist.idx}"/>'><c:out
-                                            value="${nlist.ntTitle}" /></a></td>
-                                <td><c:out
-                                        value="${nlist.ntWriter}" /></td>
-                                <td><fmt:formatDate
-                                        value="${nlist.ntRegDate}"
-                                        pattern="yyyy-MM-dd " /></td>
+                                <td style="color: red">
+                                    <c:out value="${nlist.ntStatus}"/>
+                                </td>
+                                <td>
+                                    <c:out value="${nlist.idx}" />
+                                </td>
+                                <td>
+                                    <a class='move' href='<c:out value="${nlist.idx}"/>'>
+                                        <c:out value="${nlist.ntTitle}" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <c:out value="${nlist.ntWriter}" />
+                                </td>
+                                <td>
+                                    <fmt:formatDate value="${nlist.ntRegDate}" pattern="yyyy-MM-dd " />
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -69,95 +91,98 @@
             </form>
 
             <!-- 페이징 처리 -->
-            <%-- <div class="pull-right">
-                    <ul class="pagination justify-content-center">
-                        <c:if test="${pageMaker.prev}">
-                            <li class="page-item"><a
-                                class="page-link"
-                                href="${pageMaker.startPage -1}"
-                                tabindex="-1">이전</a></li>
-                        </c:if>
-                        <c:forEach begin="${pageMaker.startPage}"
-                            end="${pageMaker.endPage}" var="num">
-                            <li
-                                class='page-item ${pageMaker.cri.pageNum == num?"active":""}'>
-                                <a class="page-link" href="${num}">${num}</a>
-                            </li>
-                        </c:forEach>
-                        <c:if test="${pageMaker.next}">
-                            <li class="page-item"><a
-                                class="page-link"
-                                href="${pageMaker.endPage +1}"
-                                tabindex="-1">다음</a></li>
-                        </c:if>
-                    </ul>
-                </div> 
+            <div class="paging">
+                <ul class="pagination justify-content-center">
+                    <c:if test="${pageMaker.prev}">
+                        <li>
+                            <a class="page-link" href="${pageMaker.startPage -1}" tabindex="-1">이전</a>
+                        </li>
+                    </c:if>
+                        
+                    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
+                        <li class='page-item ${pageMaker.cri.pageNum == num? "active" : "" }'>
+                            <a class="page-link" href="${num}">${num}</a>
+                        </li>
+                    </c:forEach>
+                        
+                    <c:if test="${pageMaker.next}">
+                        <li class="page-item">
+                            <a class="page-link" href="${pageMaker.endPage +1}" tabindex="-1">다음</a>
+                        </li>
+                    </c:if>
+                </ul>
+            </div> 
                 
-                 <form id="actionForm" action="/board/noticelist"
-                    method="get">
-                    <input type="hidden" name="pageNum"
-                        value='${pageMaker.cri.pageNum}'> <input
-                        type="hidden" name="amount"
-                        value='${pageMaker.cri.amount}'> <input
-                        type="hidden" name="type"
-                        value='${pageMaker.cri.type}'> <input
-                        type="hidden" name="keyword"
-                        value='${pageMaker.cri.keyword}'>
-                </form> --%>
+            <form id="pagingForm" action="/notice/list" method="get">
+               <input type="hidden"  name="pageNum" value='${pageMaker.cri.pageNum}'>
+               <input type="hidden"  name="amount" value='${pageMaker.cri.amount}'>
+            </form>
         </div>
-    </div>
+ 
 </main>
 
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						// 글 번호를 따로 뽑아냄
-						var result = '<c:out value="${result}"/>';
+$(document).ready(function() {
+	
+	// 페이징 버튼 클릭 -> 해당 페이지 이동 Form
+	var pagingForm = $("#pagingForm");
+	
+	// 제목 클릭 -> 상세 페이지 Form
+	var actionForm = $("#actionForm");
+	
+	// 출력 수 클릭 -> 선택된 개수만큼 출력 리스트
+	var amountForm = $("#amountForm");
 
-						var actionForm = $("#actionForm");
+	// 제목 클릭 -> 상세 페이지 (콜백함수, 비동기 처리)
+	$(".move").on("click", function(e) {
+		
+		e.preventDefault();
+		
+		var targetIDX = $(this).attr("href");
 
-/* 						$(".page-link").on(
-								"click",
-								function(e) {
-									e.preventDefault();
+		actionForm.append("<input type='hidden' name='idx' value='" + targetIDX + "'>'");
 
-									console.log("test");
+		actionForm.attr("action", "/notice/info").submit();
+	
+	});
+	
+	$(".page-link").on("click", function(e) {
+		
+		e.preventDefault();
+		
+		pagingForm.find("input[name='pageNum']").val($(this).attr("href"));
+		
+		pagingForm.submit();
+		
+	});
+	
+	// 출력 수 옵션 선택 시 값 가져오기
+	$(".amount").change(function(e) {
+		
+		e.preventDefault();
+		
+		$("#selected").val($(this).val());
+		
+		amountForm.submit();
+		
+	});
 
-									actionForm.find("input[name='pageNum']")
-											.val($(this).attr("href"));
-									actionForm.submit();
-								}); */
+	// 검색 기능
+/* 	var searchForm = $("#searchForm");
 
-						$(".move")
-								.on(
-										"click",
-										function(e) {
-											e.preventDefault();
+	$("#searchForm button").on("click", function(e) {
+	
+		e.preventDefault();
+		
+		console.log("..check.............");
 
-											var targetIDX = $(this)
-													.attr("href");
+		searchForm.find("input[name='pageNum']").val(1);
 
-											console.log(targetIDX);
-
-											actionForm
-													.append("<input type='hidden' name='idx' value='"+targetIDX+"'>'");
-											actionForm.attr("action",
-													"/notice/info")
-													.submit();
-										});
-// 검색 기능
-/* 						var searchForm = $("#searchForm");
-
-						$("#searchForm button").on("click", function(e) {
-							e.preventDefault();
-							console.log("..check.............");
-
-							searchForm.find("input[name='pageNum']").val(1);
-
-							searchForm.submit();
-						}); */
-					});
+		searchForm.submit();
+	
+	}); */
+	
+});
 </script>
 </html>

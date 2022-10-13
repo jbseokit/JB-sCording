@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ieetu.study.domain.NoticeDto;
 import com.ieetu.study.mapper.NoticeMapper;
+import com.ieetu.study.paging.Criteria;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -15,14 +16,18 @@ import lombok.extern.log4j.Log4j2;
 public class NoticeServiceImpl implements NoticeService {
     
     @Autowired
-    NoticeMapper noticemapper;
+    NoticeMapper noticeMapper;
     
     @Override
-    public List<NoticeDto> readNoticeInfo() {
+    public List<NoticeDto> readNoticeInfo(Criteria cri) {
         
-        log.info("서비스 시작 -> 매퍼 작동 전");
+        // XML에서 LIMIT에 연산자 사용 시 SQL 에러 발생
+        // LIMIT을 사용한 페이징 처리를 위해 offset 값을 변경
+        int nowPage = (cri.getPageNum()-1) * cri.getAmount();
         
-        return noticemapper.selectNoticeInfo();
+        cri.setPageNum(nowPage);
+        
+        return noticeMapper.selectNoticeInfo(cri);
         
     }
 
@@ -31,7 +36,7 @@ public class NoticeServiceImpl implements NoticeService {
         
         log.info("단일 정보 서비스 시작 -> 매퍼 작동 전");
         
-        return noticemapper.selectNoticeInfoOne(idx);
+        return noticeMapper.selectNoticeInfoOne(idx);
     }
 
     @Override
@@ -39,8 +44,14 @@ public class NoticeServiceImpl implements NoticeService {
         
         log.info("공지사항 정보 입력 서비스 시작");
         
-        noticemapper.insertNoticeInfo(notice);
+        noticeMapper.insertNoticeInfo(notice);
         
+    }
+
+    @Override
+    public int getTotalCount(Criteria cri) {
+        
+        return noticeMapper.selectTotalCount(cri);
     }
     
     

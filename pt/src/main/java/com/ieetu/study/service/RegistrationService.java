@@ -6,4 +6,6 @@ public interface RegistrationService {
 	
 	public void signUpMember(MemberDto mbr);
 	
+	public int checkid(String id);
+	
 }

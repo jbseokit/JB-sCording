@@ -5,4 +5,9 @@
 		insert into tb_mbr (mbr_nm, mbr_em, mbr_phone, mbr_id, mbr_pw, mbr_pw_val)
 		values (#{mbrNm}, #{mbrEm}, #{mbrPhone}, #{mbrId}, #{mbrPw}, #{mbrPwVal})
 	</insert>
+    
+    <select id="selectId" parameterType="String" resultType="Integer">
+      select count(*) FROM tb_mbr where mbr_id = #{id}
+    </select>
+    
 </mapper>

@@ -23,8 +23,8 @@
                     <td width="150"> <span style="color: orange;"><b>(*)</b></span> 제목 </td>
                     <td> <input type="text" id="title" name='ntTitle' size="50" required> </td>
                     <td width="150"> <span style="color: orange;"><b>(*)</b></span> 상단공지 여부 </td>
-                    <td> <input type="radio" name="ntStatus" value="고정" name="ntStatus" required> 예 
-                         <input type="radio" name="ntStatus" value="" name="ntStatus" required> 아니오 </td>
+                    <td> <input type="radio" name="ntStatus" value="고정" required> 예 
+                         <input type="radio" name="ntStatus" value="" required> 아니오 </td>
                 </tr>
                 <tr>
                     <td width="150"> <span style="color: orange;"><b>(*)</b></span> 작성자 </td>
@@ -60,6 +60,5 @@ $(document).ready(function() {
 	$("#regDate").val(new Date().toISOString().substring(0, 10));
 	
 }); 
-
 </script>
 </html>

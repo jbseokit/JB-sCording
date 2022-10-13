@@ -1,21 +1,16 @@
 package com.ieetu.study.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RequestParam;
-
 import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ieetu.study.domain.NoticeDto;
-
+import com.ieetu.study.paging.Criteria;
+import com.ieetu.study.paging.PageNum;
 import com.ieetu.study.service.NoticeService;
 
 import lombok.extern.log4j.Log4j2;
@@ -30,14 +25,16 @@ public class NoticeController {
     
     @GetMapping("/list")
 
-    public ModelAndView readNotice() {
+    public ModelAndView readNotice(Criteria cri) {
         
         ModelAndView mav = new ModelAndView();
 
         mav.setViewName("/post/listForm");
         
-        mav.addObject("noticeInfo", noticeservice.readNoticeInfo());
+        mav.addObject("pageMaker", new PageNum(cri, noticeservice.getTotalCount(cri)));
         
+        mav.addObject("noticeInfo", noticeservice.readNoticeInfo(cri));
+ 
         return mav;
 
     }

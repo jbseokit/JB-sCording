@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ieetu.study.mapper.NoticeMapper">
+    
+<!--     <sql id="criteria">
+        <trim prefix="(" suffix=") AND">
+            <foreach collection="typeArr" item="type" separator="OR">
+                <if test="type == 'T'.toString()">
+                POST_TITLE like '%'||#{keyword}||'%'
+                </if>
+                <if test="type == 'C'.toString()">
+                POST_CONTENT like '%'||#{keyword}||'%'
+                </if>
+                <if test="type == 'W'.toString()">
+                POST_WRITER like '%'||#{keyword}||'%'
+                </if>
+            </foreach>
+        </trim>
+    </sql> -->
+    
+    
     <select id="selectNoticeInfo" resultType="com.ieetu.study.domain.NoticeDto">
-        select * from tb_notice order by nt_status desc, idx desc
+        <![CDATA[
+            select * from tb_notice 
+            order by nt_status desc, idx desc
+            limit #{pageNum, jdbcType=INTEGER}, #{amount, jdbcType=INTEGER}
+        ]]>
     </select>
     
     <select id="selectNoticeInfoOne" resultType="com.ieetu.study.domain.NoticeDto">
         select * from tb_notice where idx = #{idx}
+    </select>
+    
+    <select id="selectTotalCount" resultType="Integer">
+        select count(*) from tb_notice
     </select>
     
     <insert id="insertNoticeInfo">

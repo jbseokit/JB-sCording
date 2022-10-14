@@ -12,4 +12,6 @@ public interface LoginMapper {
     
     public List<MemberDto> selectMember();
     
+    /* public int selectId(String id); */
+    
 }

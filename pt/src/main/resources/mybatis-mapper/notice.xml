@@ -2,42 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ieetu.study.mapper.NoticeMapper">
     
-<!--     <sql id="criteria">
-        <trim prefix="(" suffix=") AND">
-            <foreach collection="typeArr" item="type" separator="OR">
-                <if test="type == 'T'.toString()">
-                POST_TITLE like '%'||#{keyword}||'%'
-                </if>
-                <if test="type == 'C'.toString()">
-                POST_CONTENT like '%'||#{keyword}||'%'
-                </if>
-                <if test="type == 'W'.toString()">
-                POST_WRITER like '%'||#{keyword}||'%'
-                </if>
-            </foreach>
-        </trim>
-    </sql> -->
+     <sql id="searchType">
+          <if test="keyword!='' and keyword!=null">
+            <choose>
+                <when test='type == "T"'>AND nt_title like concat('%', #{keyword}, '%')</when>
+                <when test='type == "C"'>AND nt_content like concat('%', #{keyword}, '%')</when>
+                <when test='type == "W"'>AND nt_writer like concat('%', #{keyword}, '%')</when>
+                <otherwise>
+                    AND (nt_title like concat('%', #{keyword}, '%') OR nt_content like concat('%', #{keyword}, '%')
+                         OR nt_writer like concat('%', #{keyword}, '%'))
+                </otherwise>                
+            </choose>        
+           </if>
+    </sql> 
     
     
     <select id="selectNoticeInfo" resultType="com.ieetu.study.domain.NoticeDto">
-        <![CDATA[
-            select * from tb_notice 
-            order by nt_status desc, idx desc
-            limit #{pageNum, jdbcType=INTEGER}, #{amount, jdbcType=INTEGER}
-        ]]>
+  
+            SELECT 
+                idx, nt_status, nt_title, nt_writer, nt_content, DATE_FORMAT(nt_reg_date, '%Y-%m-%d') as nt_reg_date
+            FROM 
+                tb_notice
+            WHERE 1=1
+                <include refid="searchType"></include>
+            ORDER BY 
+                nt_status desc, idx desc
+            LIMIT #{pageNum, jdbcType=INTEGER}, #{amount, jdbcType=INTEGER}
     </select>
     
     <select id="selectNoticeInfoOne" resultType="com.ieetu.study.domain.NoticeDto">
-        select * from tb_notice where idx = #{idx}
+        SELECT 
+            idx, nt_status, nt_title, nt_writer, nt_content, date_format(nt_reg_date, '%Y-%m-%d') as nt_reg_date 
+        FROM 
+            tb_notice 
+        WHERE 
+            idx = #{idx}
     </select>
     
     <select id="selectTotalCount" resultType="Integer">
-        select count(*) from tb_notice
+        <choose>
+            <when test='type == "T"'>select count(nt_title) from tb_notice where nt_title like concat('%', #{keyword}, '%')</when>
+            <when test='type == "C"'>select count(nt_content) from tb_notice where nt_content like concat('%', #{keyword}, '%')</when>
+            <when test='type == "W"'>select count(nt_writer) from tb_notice where nt_writer like concat('%', #{keyword}, '%')</when>
+            <when test='type == "TCW"'> select count(*) from tb_notice where nt_title or nt_content or nt_writer like concat('%', #{keyword}, '%')</when>
+            <otherwise>select count(*) from tb_notice</otherwise>
+        </choose>
     </select>
     
     <insert id="insertNoticeInfo">
-        insert into tb_notice (nt_status, nt_title, nt_writer, nt_content, nt_reg_date)
-        values (#{ntStatus}, #{ntTitle}, #{ntWriter}, #{ntContent}, #{ntRegDate})
+        INSERT INTO 
+            tb_notice (nt_status, nt_title, nt_writer, nt_content, nt_reg_date)
+        VALUES 
+            (#{ntStatus}, #{ntTitle}, #{ntWriter}, #{ntContent}, #{ntRegDate})
     </insert>
     
 </mapper>

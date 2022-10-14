@@ -1,5 +1,7 @@
 package com.ieetu.study.controller;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,7 @@ public class NoticeController {
     
     @GetMapping("/list")
 
-    public ModelAndView readNotice(Criteria cri) {
+    public ModelAndView readNotice(Criteria cri) throws SQLException {
         
         ModelAndView mav = new ModelAndView();
 
@@ -34,7 +36,7 @@ public class NoticeController {
         mav.addObject("pageMaker", new PageNum(cri, noticeservice.getTotalCount(cri)));
         
         mav.addObject("noticeInfo", noticeservice.readNoticeInfo(cri));
- 
+        
         return mav;
 
     }

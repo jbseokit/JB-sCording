@@ -8,20 +8,40 @@
 <style type="text/css">
 ul li { list-style-type: none; display: inline-block; margin: 3px;}
 table {width: 65%; border: 1px solid; text-align: center;}
-.paging {padding-left: 280px;}
+.paging {padding-left: 400px;}
 a {text-decoration: none;}
+a:active {
+    color: orange;
+}
 </style>
 <meta charset="UTF-8">
 <title>공지사항</title>
 </head>
 <main>
-    <div>
         <h2>공지사항</h2>
         <!-- 검색기능 -->
-<%--         <form id="searchForm" class="d-flex" action="/board/noticelist"
+          
+    <div class="card mb-4" style="display: inline;">
+        <form id="amountForm" action="/notice/list" method="get">
+            <button class="ntreg" type="button"
+                onclick="self.location='regist'">글쓰기</button>
+            <div style="display: inline;">전체 | ${pageMaker.total}</div>
+            <div style="display: inline;">
+                출력 수 <select class="amount">
+                    <option>선택</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+            <input type="hidden" name="pageNum">
+            <input type="hidden" id="selected" name="amount">
+        </form>
+
+        <form id="searchForm" class="search" action="/notice/list"
             method="get">
-            <select name="type" class="form-select me-2"
-                aria-label="Default select example">
+            <select name="type" class="searchOption"
+                style="display: inline;">
                 <option value="TCW"
                     ${pageMaker.cri.type eq 'TCW'?"selected":"" }>전체검색</option>
                 <option value="T"
@@ -36,86 +56,74 @@ a {text-decoration: none;}
                 value='${pageMaker.cri.pageNum }'> <input
                 type='hidden' name="amount"
                 value='${pageMaker.cri.amount }'>
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form> --%>
-    </div>
-    <div class="card mb-4">
-        <form id="amountForm" action="/notice/list" method="get">
-            <button class="ntreg" type="button" onclick="self.location='regist'">글쓰기</button>
-                <div style="display: inline;">전체 | ${pageMaker.total}</div>
-                    <div style="display: inline;"> 출력 수 
-                        <select class="amount" name="amount">
-                            <option >선택</option>
-                            <option value="10"> 10 </option>
-                            <option value="20"> 20 </option>
-                            <option value="30"> 30 </option>
-                        </select>
-                    </div>
-            <input type="hidden" id="selected" name="amount">
+            <button type="submit">검색</button>
         </form>
-            <form id="actionForm">
-                <table class="table" border="1">
-                    <thead>
+
+        <form id="actionForm">
+            <table class="table" border="1">
+                <thead>
+                    <tr>
+                        <th>상태</th>
+                        <th>NO</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>최종 수정일자</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <c:forEach items="${noticeInfo}" var="nlist">
                         <tr>
-                            <th>상태</th>
-                            <th>NO</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>최종 수정일자</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        <c:forEach items="${noticeInfo}" var="nlist">
-                            <tr>
-                                <td style="color: red">
-                                    <c:out value="${nlist.ntStatus}"/>
-                                </td>
-                                <td>
-                                    <c:out value="${nlist.idx}" />
-                                </td>
-                                <td>
-                                    <a class='move' href='<c:out value="${nlist.idx}"/>'>
-                                        <c:out value="${nlist.ntTitle}" />
-                                    </a>
-                                </td>
-                                <td>
-                                    <c:out value="${nlist.ntWriter}" />
-                                </td>
-                                <td>
-                                    <fmt:formatDate value="${nlist.ntRegDate}" pattern="yyyy-MM-dd " />
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </form>
+                            <td style="color: red">
+                                <c:out value="${nlist.ntStatus}"/>
+                            </td>
+                            <td>
+                                <c:out value="${nlist.idx}" />
+                            </td>
+                            <td>
+                                <a class='move' href='<c:out value="${nlist.idx}"/>'>
+                                    <c:out value="${nlist.ntTitle}" />
+                                </a>
+                            </td>
+                            <td>
+                                <c:out value="${nlist.ntWriter}" />
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${nlist.ntRegDate}" pattern="yyyy-MM-dd " />
+                            </td>
+                       </tr>
+                   </c:forEach>
+               </tbody>
+            </table>
+        </form>
 
             <!-- 페이징 처리 -->
             <div class="paging">
                 <ul class="pagination justify-content-center">
                     <c:if test="${pageMaker.prev}">
                         <li>
-                            <a class="page-link" href="${pageMaker.startPage -1}" tabindex="-1">이전</a>
+                            <a class="page-link" href="${pageMaker.startPage -1}">이전</a>
                         </li>
                     </c:if>
                         
                     <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
-                        <li class='page-item ${pageMaker.cri.pageNum == num? "active" : "" }'>
+                        <li>
                             <a class="page-link" href="${num}">${num}</a>
                         </li>
                     </c:forEach>
                         
                     <c:if test="${pageMaker.next}">
                         <li class="page-item">
-                            <a class="page-link" href="${pageMaker.endPage +1}" tabindex="-1">다음</a>
+                            <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
                         </li>
                     </c:if>
                 </ul>
-            </div> 
+            </div>
                 
             <form id="pagingForm" action="/notice/list" method="get">
                <input type="hidden"  name="pageNum" value='${pageMaker.cri.pageNum}'>
                <input type="hidden"  name="amount" value='${pageMaker.cri.amount}'>
+               <input type="hidden"  name="type" value='${pageMaker.cri.type}'>
+               <input type="hidden"  name="keyword" value='${pageMaker.cri.keyword}'>
             </form>
         </div>
  
@@ -147,6 +155,7 @@ $(document).ready(function() {
 	
 	});
 	
+	// 페이징 버튼 클릭 시 해당 pageNum 찾아 submit
 	$(".page-link").on("click", function(e) {
 		
 		e.preventDefault();
@@ -164,24 +173,24 @@ $(document).ready(function() {
 		
 		$("#selected").val($(this).val());
 		
+		amountForm.find("input[name='pageNum']").val(1);
+		
 		amountForm.submit();
 		
 	});
 
 	// 검색 기능
-/* 	var searchForm = $("#searchForm");
+ 	var searchForm = $("#searchForm");
 
 	$("#searchForm button").on("click", function(e) {
 	
 		e.preventDefault();
-		
-		console.log("..check.............");
 
 		searchForm.find("input[name='pageNum']").val(1);
 
 		searchForm.submit();
 	
-	}); */
+	});
 	
 });
 </script>

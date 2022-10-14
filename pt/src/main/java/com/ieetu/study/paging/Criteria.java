@@ -10,9 +10,9 @@ public class Criteria {
 	private int amount;
 	
 	// 검색 
-	//private String type;
+	private String type;
 	
-	//private String keyword;
+	private String keyword;
 	
 	public Criteria() {
 	
@@ -30,9 +30,4 @@ public class Criteria {
 	    
 	}
 	
-	/*public String[] getTypeArr() {
-		
-	    return type == null? new String[] {}: type.split("");
-	    
-	}*/
 }

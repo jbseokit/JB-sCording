@@ -7,5 +7,7 @@ import com.ieetu.study.domain.MemberDto;
 public interface LoginService {
     
     public List<MemberDto> selectMember();
+    
+    /* public int checkid(String id); */
       
 }

@@ -22,4 +22,12 @@ public class LoginServiceImpl implements LoginService {
         
     }
 
+    /*
+     * @Override public int checkid(String id) {
+     * 
+     * return loginmapper.selectId(id); }
+     */
+    
+    
+
 }

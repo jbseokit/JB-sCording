@@ -15,13 +15,13 @@
             <h4>시스템 이용을 위해 로그인 하시기 바랍니다.</h4>
             <nav></nav>
             <div class="find-btn">
-                <form role="form" action="/post" method="get">
+                <form id="authForm" action="/auth" method="POST">
                     <table style="border: none;">
                         <tr>
                             <td><b>아이디</b></td>
                             <td><input id="id" name='mbrId'
                                 size="30" required></td>
-                            <td rowspan="2"><button type="button">로그인</button></td>
+                            <td rowspan="2"><button type="button" id="auth">로그인</button></td>
                         </tr>
                         <tr>
                             <td><b>비밀번호</b></td>
@@ -59,8 +59,25 @@
         </div>
     </main>
 </body>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	var authForm = $("#authForm");
+	
+	$("#auth").on("click", function(e) {
+		
+		e.preventDefault();
+		
+		authForm.submit();
+		
+		
+		
+	});
+	
+});
+</script>
 </html>
-
 <!-- <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){

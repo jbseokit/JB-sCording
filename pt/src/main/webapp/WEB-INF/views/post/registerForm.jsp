@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <td width="150"> <span style="color: orange;"><b>(*)</b></span> 작성자 </td>
-                    <td width="150"> <input type="text" id="writer" name="ntWriter" size="30" required></td>
+                    <td width="150"> <input type="text" id="writer" name="ntWriter" size="30" value="${mbrNm}" readonly></td>
                     <td width="150"> <span style="color: orange;"><b>(*)</b></span> 작성일자 </td>
                     <td><input type="date" id="regDate" name="ntRegDate"></td>
                 </tr>

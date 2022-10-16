@@ -18,8 +18,7 @@ a:active {
 <title>공지사항</title>
 </head>
 <main>
-        <h2>공지사항</h2>
-        <!-- 검색기능 -->
+    <h2>공지사항</h2>
           
     <div class="card mb-4" style="display: inline;">
         <form id="amountForm" action="/notice/list" method="get">

@@ -1,6 +1,7 @@
 package com.ieetu.study.controller;
 
-import java.sql.SQLException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,8 @@ public class NoticeController {
     
     @GetMapping("/list")
 
-    public ModelAndView readNotice(Criteria cri) throws SQLException {
-        
+    public ModelAndView readNotice(Criteria cri, HttpSession session) throws Exception {
+
         ModelAndView mav = new ModelAndView();
 
         mav.setViewName("/post/listForm");
@@ -59,9 +60,11 @@ public class NoticeController {
     
     @GetMapping("/regist")
     
-    public ModelAndView makePost() {
-        
+    public ModelAndView makePost(HttpServletRequest request, HttpSession session) {
+
         ModelAndView mav = new ModelAndView();
+        
+        mav.addObject("mbrNm", session.getAttribute("mbrNm"));
         
         mav.setViewName("/post/registerForm");
         

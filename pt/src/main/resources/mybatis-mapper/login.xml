@@ -10,5 +10,16 @@
       select count(*) FROM tb_mbr where mbr_id = #{id}
     </select> -->
     
+    <select id="authMember" resultType="boolean">
+    	select
+    		if(count(*) = 1, 1, 0)
+    	from 
+    		tb_mbr
+    	where mbr_id = #{mbrId} and mbr_pw = #{mbrPw}
+    </select>
+    
+    <select id="authMemberName" resultType="string">
+    	select mbr_nm from tb_mbr where mbr_id = #{mbrId} and mbr_pw = #{mbrPw}
+    </select>
     
 </mapper>

@@ -12,6 +12,10 @@ public interface LoginMapper {
     
     public List<MemberDto> selectMember();
     
-    /* public int selectId(String id); */
+    public String authMemberName(MemberDto member);
+    
+    public boolean authMember(MemberDto member);
+    
+    
     
 }

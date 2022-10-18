@@ -609,3 +609,53 @@ function getSessionItem(key, objKeys) {
         return obj;
     }
 }
+
+function callByMultipartFormData(url, callbackFunc, data, callbackFailFunc, ajaxAsync) {
+    if (ajaxAsync === undefined) {
+        ajaxAsync = true;
+    }
+
+    url = makeApiUrl(url);
+    /*if (consoleLog) {
+        console.log(url);
+    }*/
+    $.ajax({
+        type : "post",
+        async : ajaxAsync,
+        url : url,
+        data : data,
+        dataType : "json",
+        cache : false,
+        xhrFields : {
+            withCredentials : true
+        },
+        crossDomain : true,
+        processData : false,
+        contentType : false,
+        complete : function() {
+            $("#loading").hide();
+        },
+        success : function(data, textStatus, jqXHR) {
+            /*if (consoleLog) {
+                console.log("Success=====S");
+                logView(data);
+                console.log("Success=====E");
+            }*/
+            if (isFunction(callbackFunc)) {
+                window[callbackFunc](data);
+            }
+        },
+        error : function(jqXHR, textStatus, errorThrown) {
+            /*if (consoleLog) {
+                console.log("error=====S");
+                logView(jqXHR);
+                console.log("error=====E");
+            }*/
+            if (isFunction(callbackFailFunc)) {
+                window[callbackFailFunc](jqXHR.responseJSON);
+            } else {
+                handleErrorStatus(jqXHR);
+            }
+        }
+    });
+}

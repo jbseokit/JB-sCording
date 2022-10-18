@@ -72,7 +72,7 @@ $(document).ready(function() {
 	
 	var authForm = $("#authForm");
 
-	// resources-js-common-rsa-rsa.js에 정의된 함수
+	// resources-js-common-rsa-rsa.js에 정의
 	var rsa = new RSAKey();
 	
 	// 공개키 생성

@@ -1,6 +1,7 @@
 package com.ieetu.study.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ieetu.study.domain.NoticeDto;
@@ -60,7 +63,7 @@ public class NoticeController {
     
     @GetMapping("/regist")
     
-    public ModelAndView makePost(HttpServletRequest request, HttpSession session) {
+    public ModelAndView makePost(HttpSession session) {
 
         ModelAndView mav = new ModelAndView();
         
@@ -73,16 +76,18 @@ public class NoticeController {
     
     @PostMapping("/save")
     
-    public ModelAndView makePost(NoticeDto notice) {
-        
-        noticeservice.registNoticeInfo(notice);
+    public ModelAndView makePost(List<MultipartFile> files, NoticeDto notice) {
         
         ModelAndView mav = new ModelAndView();
+        
+        noticeservice.registNoticeInfo(files, notice);
         
         mav.setViewName("redirect:/notice/list");
         
         return mav;
         
     }
+    
+    
 
 }

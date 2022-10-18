@@ -191,6 +191,15 @@ $(document).ready(function() {
 	
 	});
 	
+	// home으로부터 성공적으로 로그인 시 띄워주는 alert
+	// resultMSG가 존재할 경우 alret 창을 띄운다.
+	var resultMsg = "${resultMsg}";
+	
+	if (resultMsg > ' ') {
+		
+		alert(resultMsg);
+	}
+	
 });
 </script>
 </html>

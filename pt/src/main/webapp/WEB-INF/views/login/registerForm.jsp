@@ -36,9 +36,10 @@
 								size="30" required></td>
 							<td></td>
 							<td> <span style="color: orange;"><b>(*)</b></span> 비밀번호 확인</td>
-							<td><input type="password" id="pwv"
-								name='mbrPwVal' size="30" required></td>
-							<td></td>
+							<td><input type="password" class="pwCheck" id="pwv" size="30" required></td>
+							<td><span id="pwvSuccess" style="display:none; color: blue;">비밀번호 일치</span>
+                                <span id="pwvDanger" style="display:none; color: red; ">비밀번호 불일치</span>
+                            </td>
 						</tr>
 						<tr>
 							<td> <span style="color: orange;"><b>(*)</b></span> 휴대폰번호</td>
@@ -48,7 +49,7 @@
 							<td> <span style="color: orange;"><b>(*)</b></span> 이메일주소</td>
 							<td><input id="email" name='mbrEm' size="30"
 								required></td>
-							<td style="text-align: center;"><button type="button" id="reg">가입</button></td>
+							<td style="text-align: center;" width="120px"><button type="button" id="reg">가입</button></td>
 						</tr>
 					</table><p>
 				</form>
@@ -57,6 +58,7 @@
 	</main>
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="/resources/js/common/aes/aes_pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	
@@ -107,7 +109,7 @@ $(document).ready(function() {
 		
 	});
 	
-	$("#reg").click(function(){
+	$("#reg").click(function() {
 		
 		// 회원 가입 시 이름 출력
 		var name = $("#name").val();
@@ -124,6 +126,36 @@ $(document).ready(function() {
 			
 		}
 		
+	});
+	
+	$(".pwCheck").focusout(function() {
+		
+		var pw = $("#pw").val();
+		
+		var pwv = $("#pwv").val();
+		
+		if ( pw != '' && pwv == '') {
+			
+			null;
+		
+		} else if ( pw != '' || pwv != '') {
+			
+			if ( pw == pwv ) {
+				
+				$("#pwvSuccess").css('display', 'inline-block');
+
+				$("#pwvDanger").css('display', 'none');
+				
+			} else {
+				
+				$("#pwvSuccess").css('display', 'none');
+
+				$("#pwvDanger").css('display', 'inline-block');
+				
+			}
+
+		} 
+			
 	});
 	
 });

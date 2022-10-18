@@ -19,6 +19,4 @@ public class MemberDto {
     
     private String mbrPw;
     
-    private String mbrPwVal;
-    
 }

@@ -56,4 +56,11 @@
             (#{ntStatus}, #{ntTitle}, #{ntWriter}, #{ntContent}, #{ntRegDate})
     </insert>
     
+    <insert id="insertNoticeFile">
+        INSERT INTO
+            tb_file (file_owner, file_org_nm, file_saved_nm, file_saved_path, file_saved_date, file_size)
+        VALUES
+            (#{fileOwner}, #{fileOrgNm}, #{fileSavedNm}, #{fileSavedPath}, #{fileSavedDate}, #{fileSize})
+    </insert>
+    
 </mapper>

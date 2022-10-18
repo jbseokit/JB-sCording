@@ -32,13 +32,13 @@ public class LoginController {
     
     public ModelAndView readloginForm(HttpServletRequest request, HttpServletResponse response) {
     	
+        RsaModule rsaModule = new RsaModule();
+        
+        ModelAndView mav = new ModelAndView();
+        
     	HttpSession session = request.getSession();
     	
     	PrivateKey key = (PrivateKey) session.getAttribute("RSAprivateKey");
-    	
-    	ModelAndView mav = new ModelAndView();
-    	
-    	RsaModule rsaModule = new RsaModule();
     	
     	if (key != null) {
     		
@@ -66,9 +66,9 @@ public class LoginController {
     
     public ModelAndView authMember(HttpServletRequest request, MemberDto member, RedirectAttributes redirect) throws Exception {
         
+        RsaModule rsaModule = new RsaModule();
+        
     	ModelAndView mav = new ModelAndView();
-    	
-    	RsaModule rsaModule = new RsaModule();
     	
     	HttpSession session = request.getSession();
     	
@@ -102,9 +102,11 @@ public class LoginController {
         
         if (result == true) {
         	
-        	 session.setMaxInactiveInterval(1800);
+        	 session.setMaxInactiveInterval(1800); // 세션 타임아웃 30분
         	 
         	 session.setAttribute("mbrNm", loginservice.authMemberName(member));
+        	 
+        	 redirect.addFlashAttribute("resultMsg", "로그인 되었습니다.");
         	 
         	 mav.setViewName("redirect:/notice/list");
              

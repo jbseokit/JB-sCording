@@ -20,19 +20,17 @@ import com.ieetu.study.domain.MemberDto;
 
 import com.ieetu.study.service.RegistrationService;
 
-
-
 @RestController
 
 public class RegistrationController {
-	
+
 	@Autowired
 	RegistrationService regSerivce;
-	
+
 	@GetMapping("/regist")
     
     public ModelAndView regist() {
-        
+
         ModelAndView mav = new ModelAndView();
         
         mav.setViewName("/login/registerForm");
@@ -44,9 +42,9 @@ public class RegistrationController {
     
     public ModelAndView regist(MemberDto mbr) {
   
-        regSerivce.signUpMember(mbr);
-        
         ModelAndView mav = new ModelAndView();
+        
+        regSerivce.signUpMember(mbr);
         
         // url 호출
         mav.setViewName("redirect:/home");

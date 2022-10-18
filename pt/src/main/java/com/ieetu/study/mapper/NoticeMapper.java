@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ieetu.study.domain.FileDto;
 import com.ieetu.study.domain.NoticeDto;
 import com.ieetu.study.paging.Criteria;
 
@@ -18,5 +19,7 @@ public interface NoticeMapper {
     public int selectTotalCount(Criteria cri);
     
     public void insertNoticeInfo(NoticeDto notice);
+    
+    public void insertNoticeFile(FileDto fileInfo);
     
 }
